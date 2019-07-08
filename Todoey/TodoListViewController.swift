@@ -10,7 +10,9 @@ import UIKit
 
 class TodoListViewController: UITableViewController {
     
-    let itemArray = ["Put right foot in","Take right foot out","Put right foot back in","Shake it all about (right foot)"]
+    var itemArray = ["Put right foot in","Take right foot out","Put right foot back in","Shake it all about (right foot)"]
+    
+    @IBOutlet weak var addButton: UIBarButtonItem!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,6 +48,46 @@ class TodoListViewController: UITableViewController {
         tableView.deselectRow(at: indexPath, animated: true)
         
         
+    }
+    
+    //MARK - Add New Items
+    
+    @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
+        var textField = UITextField()
+        
+        let alert = UIAlertController(title: "Add New Todoey Item", message: "", preferredStyle: .alert)
+        
+        let action = UIAlertAction(title: "Add Item", style: .default) { (action) in
+            if textField.text!.isEmpty {
+                let blankAlert = UIAlertController(title: "Item Can't Be Blank", message: "Please enter a name", preferredStyle: .alert)
+                
+                let blankAction1 = UIAlertAction(title: "Add Item", style: .default) { (action) in
+                    self.addButtonPressed(self.addButton)
+                }
+                let blankAction2 = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
+                    print("Canceled")
+                }
+                
+                blankAlert.addAction(blankAction1)
+                blankAlert.addAction(blankAction2)
+        
+                self.present(blankAlert, animated: true, completion: nil)
+                
+            } else {
+                self.itemArray.append(textField.text!)
+                self.tableView.reloadData()
+            }
+            
+            
+        }
+        
+        alert.addAction(action)
+        alert.addTextField { (alertTextField) in
+            alertTextField.placeholder = "Create New Item"
+            textField = alertTextField
+            
+        }
+        present(alert, animated: true, completion: nil)
     }
     
 }
