@@ -12,11 +12,16 @@ class TodoListViewController: UITableViewController {
     
     var itemArray = ["Put right foot in","Take right foot out","Put right foot back in","Shake it all about (right foot)"]
     
+    let defaults = UserDefaults.standard
+    
     @IBOutlet weak var addButton: UIBarButtonItem!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        if let items = defaults.array(forKey: "TodoListArray") as? [String] {
+            itemArray = items
+        }
     }
     
     
@@ -75,6 +80,9 @@ class TodoListViewController: UITableViewController {
                 
             } else {
                 self.itemArray.append(textField.text!)
+                
+                self.defaults.set(self.itemArray, forKey: "TodoListArray")
+                
                 self.tableView.reloadData()
             }
             
